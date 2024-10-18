@@ -40,11 +40,27 @@ while True:
         game.file_reader.update_high_score(game.scoreboard.score)
         game.show_game_over(game.scoreboard.score, game.file_reader.high_score)
         
+        # Player presses P to reset highscore
+        if pygame.key.get_pressed()[pygame.K_p] == True:
+            game.confirming_reset = True
+            game.ended = False
+        
         # Player presses SPACE key to restart game
-        if pygame.key.get_pressed()[pygame.K_SPACE] == True:
+        elif pygame.key.get_pressed()[pygame.K_SPACE] == True:
             game = Game()
             game.create_game()
             
+    elif game.confirming_reset:
+        game.get_confirmation()
+        
+         # Player confirms reset
+        if pygame.key.get_pressed()[pygame.K_y] == True:
+            game.file_reader.reset_high_score()
+            game = Game()
+            game.create_game()
+        elif pygame.key.get_pressed()[pygame.K_n] == True:
+            game.ended = True
+                      
     elif game.started and not game.ended:
         # Game ends when player falls off screen
         if game.player.rect.y > Screen.HEIGHT:
@@ -68,8 +84,8 @@ while True:
         game.scoreboard.calc_score(game.player)
         game.scoreboard.update()
         
-        if game.started:
-            game.player_controller.update_player_position()
+        
+        game.player_controller.update_player_position()
         
         
     clock.tick(60)
