@@ -47,19 +47,19 @@ while True:
         
         # Player presses SPACE key to restart game
         elif pygame.key.get_pressed()[pygame.K_SPACE] == True:
-            game = Game()
-            game.create_game()
+            game.restart()
             
     elif game.confirming_reset:
-        game.get_confirmation()
+        game.get_confirmation() # Shows confirmation page
         
          # Player confirms reset
         if pygame.key.get_pressed()[pygame.K_y] == True:
-            game.file_reader.reset_high_score()
-            game = Game()
-            game.create_game()
+            game.scoreboard.reset_high_score()
+            game.restart()
+            
         elif pygame.key.get_pressed()[pygame.K_n] == True:
-            game.ended = True
+            game.ended = True # Brings user back to 'Game Over' screen
+            game.confirming_reset = False
                       
     elif game.started and not game.ended:
         # Game ends when player falls off screen

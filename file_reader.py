@@ -14,4 +14,4 @@ class FileReader:
                 
     def reset_high_score(self) :
         with open("highscore.txt", "w") as file:
-                file.write(str(0))
+                file.write("0")

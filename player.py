@@ -12,14 +12,21 @@ class Player:
     GRAVITY = 0.5
     WIDTH = 30
     HEIGHT = 30
+    INITIAL_POSITION = ((Screen.WIDTH/2)-(WIDTH/2), (Screen.HEIGHT * 5/6)-(HEIGHT)-5)
 
-    def __init__(self, x: int, y: int) -> None:
-        self.rect = pygame.Rect(x, y, Player.WIDTH, Player.HEIGHT)
+    def __init__(self) -> None:
+        self.rect = pygame.Rect(*Player.INITIAL_POSITION, Player.WIDTH, Player.HEIGHT)
+        self.rect.center = Player.INITIAL_POSITION
         self.y_velocity = 0
         self.x_velocity = 0
 
     def draw(self, surface):
         pygame.draw.rect(surface, (0,255,0), self.rect)
+        
+    def restart(self):
+        self.x_velocity = 0
+        self.y_velocity = 0
+        self.rect.center = Player.INITIAL_POSITION
 
 
 class PlayerController:

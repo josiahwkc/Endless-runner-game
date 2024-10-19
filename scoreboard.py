@@ -4,6 +4,7 @@ import sys
 import os
 
 from player import Player
+from file_reader import *
 
 pygame.init()
 pygame.font.init()
@@ -13,8 +14,9 @@ class Scoreboard:
     FONT_STYLE = 'PressStart2P-Regular.ttf'
     FONT_SIZE = 10
     
-    def __init__(self, high_score: int) -> None:
-        self.high_score = high_score 
+    def __init__(self, file_reader) -> None:
+        self.file_reader = file_reader
+        self.high_score = self.file_reader.high_score 
         self.score = 0
         self.max_score = 0
         
@@ -48,3 +50,14 @@ class Scoreboard:
             self.high_score = self.score
         self.high_score_surface = self.high_score_font.render('High-Score: ' + str(self.high_score), True, (0, 0, 255))
         self.score_surface = self.score_font.render('Score: ' + str(self.score), True, (0, 0, 255))
+        
+    
+    def restart(self):
+        self.score = 0
+        self.max_score = 0
+        
+    
+    def reset_high_score(self):
+        self.restart()
+        self.high_score = 0
+        self.file_reader.reset_high_score()

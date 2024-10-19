@@ -1,6 +1,7 @@
 
 import pygame
 
+import game_platform
 from player import *
 from game_platform import *
 import scoreboard
@@ -9,10 +10,6 @@ from scoreboard import *
 from file_reader import *
 
 class Game:
-    #Set player spawn position
-    PLAYER_X_POS = (Screen.WIDTH/2)-(Player.WIDTH/2)
-    PLAYER_Y_POS = (Screen.HEIGHT * 5/6)-(Player.HEIGHT)-5
-
     NUMBER_OF_PLATFORMS = 10 # Change this value to change the number of platforms present in the game
 
     SCOREBOARD_POSITION = (10,10)
@@ -27,7 +24,6 @@ class Game:
         self.platforms = None
         self.player = None
         self.player_controller = None
-        self.running = False
         self.started = False
         self.ended = False
         self.confirming_reset = False
@@ -38,7 +34,7 @@ class Game:
 
         self.file_reader = FileReader()
         
-        self.scoreboard = Scoreboard(self.file_reader.high_score)
+        self.scoreboard = Scoreboard(self.file_reader)
         self.scoreboard.high_score_Rect.topleft = Game.SCOREBOARD_POSITION
         self.scoreboard.scoreRect.top = self.scoreboard.high_score_Rect.bottom + 10
         self.scoreboard.scoreRect.left = 10
@@ -46,8 +42,15 @@ class Game:
         self.platform_generator = PlatformGenerator(Game.NUMBER_OF_PLATFORMS)
         self.platforms = self.platform_generator.platforms
 
-        self.player = Player(Game.PLAYER_X_POS, Game.PLAYER_Y_POS)
+        self.player = Player()
         self.player_controller = PlayerController(self.player, self.platforms)
+        
+    def restart(self):
+        self.player.restart()
+        self.scoreboard.restart()
+        self.platform_generator.reset_platforms()
+        self.ended = False
+        self.confirming_reset = False
         
     '''
     Moves platform down when player is above a certain height.
@@ -86,10 +89,9 @@ class Game:
         high_score_rect.center = (Screen.WIDTH/2, score_rect.bottom + 20)
         self.surface.blit(high_score_surface , high_score_rect)
         
-        
         # Create 'Reset High-score' text
         reset_font = pygame.font.Font(Game.FONT_STYLE, 14)
-        reset_surface = reset_font.render('Press P to RESET HIGH-SCORE', True, (255, 0, 0))
+        reset_surface = reset_font.render('Press P to RESET high-score', True, (255, 0, 0))
         reset_rect = reset_surface.get_rect()
         reset_rect.center = (Screen.WIDTH/2, high_score_rect.bottom + 20)
         self.surface.blit(reset_surface , reset_rect)

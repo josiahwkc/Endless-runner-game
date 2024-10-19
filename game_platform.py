@@ -8,6 +8,7 @@ import math
 class Platform:
     WIDTH = 80
     HEIGHT = 5
+    INITIAL_POSITION = (Screen.WIDTH / 2, Screen.HEIGHT * (5/6))
 
     def __init__(self, x: int, y: int) -> None:
         self.rect = pygame.Rect(x, y, Platform.WIDTH, Platform.HEIGHT)
@@ -17,7 +18,7 @@ class Platform:
         
         
 class PlatformGenerator:
-
+    
     def __init__(self, number_of_platforms: int) -> None:
         self.platforms = []
         self.top_platform = self.generate(number_of_platforms)
@@ -32,9 +33,7 @@ class PlatformGenerator:
             self.platforms.append(game_platform)
         
         # Places the initial platform
-        initial_x_position = Screen.WIDTH / 2
-        initial_y_position = Screen.HEIGHT * (5/6)
-        self.platforms[0].rect.center = (initial_x_position, initial_y_position)
+        self.platforms[0].rect.center = Platform.INITIAL_POSITION
         self.top_platform = self.platforms[0]
     
     
@@ -99,3 +98,11 @@ class PlatformGenerator:
             self.randomise_position(platform)
             
         return self.platforms[number_of_platforms - 1]
+    
+    def reset_platforms(self):
+        self.platforms[0].rect.center = Platform.INITIAL_POSITION
+        self.top_platform = self.platforms[0]
+        
+        for i in range(1, len(self.platforms)):
+            platform = self.platforms[i]
+            self.randomise_position(platform)
